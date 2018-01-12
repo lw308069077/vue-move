@@ -16,6 +16,8 @@ export default {
       },
       /* 提交满意度调查 */
       async postSatisfaction(repairId, Satisfaction) {
+        console.log(repairId)
+        console.log(111111111)
         try {
           let res = await this.$http.post(`/cmp/v1/repair/${repairId}/satisfaction`, Satisfaction)
           console.log(res.data.data)

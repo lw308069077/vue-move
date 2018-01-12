@@ -5,7 +5,7 @@
 export default {
   methods: {
     /* 获取所有的维修资产状态 */
-    async getRepaires(emplNo) {
+    async getRepaires (emplNo) {
       try {
         let res = await this.$http.get(`/cmp/v1/empl/${emplNo}/repaires`)
         let obj = {}
@@ -24,6 +24,6 @@ export default {
       } catch (res) {
         console.log(res)
       }
-    },
+    }
   }
 }

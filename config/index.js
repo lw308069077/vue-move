@@ -13,6 +13,7 @@ module.exports = {
     proxyTable: {
       '/cmp/v1': {
         target: 'http://192.168.150.30',
+        // target: 'http://192.168.135.37',
         pathRewrite: {
           '^/cmp/v1': '/cmp/v1'
         }

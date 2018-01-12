@@ -1,6 +1,5 @@
 <template>
     <div class="index-content">
-        <!-- <x-header :left-options="{backText: ''}">首页</x-header> -->
         <grid>
           <grid-item link="/myResource">
             <div class="iconBox">
@@ -54,13 +53,13 @@ export default {
   },
   data () {
     return {
-      emplNo:'15726',
+      emplNo: '15726',
       total: 0,
       pageNo: 1, // 当前页码
       pageSize: 10, // 每页记录数
       datas: {},
       repairingList: [],
-      repairedList: [],
+      repairedList: []
     }
   },
   async created () {
@@ -76,13 +75,15 @@ export default {
     richScan () {
       wx.config({
         debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-        appId: '', // 必填，公众号的唯一标识
-        timestamp: '', // 必填，生成签名的时间戳
-        nonceStr: '', // 必填，生成签名的随机串
-        signature: '', // 必填，签名，见附录1
-        jsApiList: [] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        appId: 'wxf04356047e9220da', // 必填，公众号的唯一标识
+        timestamp: '1515654478', // 必填，生成签名的时间戳
+        nonceStr: 'b831f961-2f13-4628-b942-dea1ef1b1e18', // 必填，生成签名的随机串
+        signature: 'b986535bcf5b2c015dd7f7bafc9c2343df6f07d1', // 必填，签名，见附录1
+        jsApiList: [
+          'scanQRCode'
+        ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
       })
-    },
+    }
   },
   watch: {
     datas: function () {

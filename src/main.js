@@ -5,12 +5,12 @@ import App from './App'
 import router from './router'
 import './common/style/index.less'
 import axios from 'axios'
+import fastclick from 'fastclick'
+import { LoadingPlugin } from 'vux'
 
-const FastClick = require('fastclick')
-
-
+Vue.use(LoadingPlugin)
 Vue.config.productionTip = false
-FastClick.attach(document.body)
+fastclick.attach(document.body)
 Vue.prototype.$http = axios
 
 /* eslint-disable no-new */

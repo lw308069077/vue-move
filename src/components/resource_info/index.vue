@@ -1,11 +1,10 @@
 <template>
     <div class="resource-info-content">
-        <!-- <x-header :left-options="{backText: ''}">资产信息</x-header> -->
         <tab>
           <tab-item selected @on-item-click="onItemClick">基本信息</tab-item>
-          <tab-item @on-item-click="onItemClick"  v-if="baseInfoDatas.isZcAdmin">使用记录</tab-item>
-          <tab-item @on-item-click="onItemClick"  v-if="baseInfoDatas.isZcAdmin">购置记录</tab-item>
-          <tab-item @on-item-click="onItemClick"  v-if="baseInfoDatas.isZcAdmin">维修记录</tab-item>
+          <tab-item @on-item-click="onItemClick"  v-if="baseInfoDatas && baseInfoDatas.isZcAdmin">使用记录</tab-item>
+          <tab-item @on-item-click="onItemClick"  v-if="baseInfoDatas && baseInfoDatas.isZcAdmin">购置记录</tab-item>
+          <tab-item @on-item-click="onItemClick"  v-if="baseInfoDatas && baseInfoDatas.isZcAdmin">维修记录</tab-item>
         </tab>
 
         <div v-if="index == 0">
@@ -28,8 +27,10 @@ import BuysLog from './children/buys_log'
 import RepairLogs from './children/repair_logs'
 import UseLogs from './children/use_logs'
 import {Tab, TabItem} from 'vux'
+import api from './api'
 
 export default {
+  mixins: [api],
   components: {
     Tab,
     TabItem,
@@ -40,24 +41,26 @@ export default {
   },
   data () {
     return {
+      emplNo: '15726',
       index: 0,
-      baseInfoDatas: {
-        tdId: 'G002-01732',
-        zcName: '台式电脑—主机',
-        model: '联想',
-        config: 'Y450 4G+500G',
-        oneClass: '电子产品',
-        twoClass: '电脑',
-        isZcAdmin: 1,
-        bxClassId: '2343'
-      }
+      baseInfoDatas: {}
     }
+  },
+  created () {
+    this.refrech()
   },
   methods: {
     // tab切换
     onItemClick (index) {
       this.index = index
+    },
+    async refrech () {
+      this.baseInfoDatas = await this.getBaseinfo(this.$route.query.zcId, this.emplNo)
+      console.log(this.baseInfoDatas)
     }
+  },
+  watch: {
+
   }
 }
 </script>
