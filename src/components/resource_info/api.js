@@ -2,12 +2,14 @@
  * Created by liwen on 2018/01/05.
  */
 
+import {BASE_URL} from 'tool/tool'
+
 export default {
   methods: {
     /* 基本信息 */
     async getBaseinfo (zcId, emplNo) {
       try {
-        let res = await this.$http.get(`/cmp/v1/empl/${emplNo}/resource/${zcId}/baseinfo`)
+        let res = await this.$http.get(`${BASE_URL}/empl/${emplNo}/resource/${zcId}/baseinfo`)
         // console.log(res.data.data)
         return res.data.data
       } catch (res) {
@@ -17,7 +19,7 @@ export default {
     /* 购置记录 */
     async getBuysLog (zcId) {
       try {
-        let res = await this.$http.get(`/cmp/v1/resource/${zcId}/buyslog`)
+        let res = await this.$http.get(`${BASE_URL}/resource/${zcId}/buyslog`)
         // console.log(res.data.data)
         return res.data.data
       } catch (res) {
@@ -27,7 +29,7 @@ export default {
     /* 使用记录 */
     async getUseLogs (zcId) {
       try {
-        let res = await this.$http.get(`/cmp/v1/resources/${zcId}/uselogs`)
+        let res = await this.$http.get(`${BASE_URL}/resources/${zcId}/uselogs`)
         // console.log(res)
         return res.data
       } catch (res) {
@@ -37,7 +39,7 @@ export default {
     /* 维修记录 */
     async getRepairesLogs (zcId) {
       try {
-        let res = await this.$http.get(`/cmp/v1/resources/${zcId}/repaireslogs`)
+        let res = await this.$http.get(`${BASE_URL}/resources/${zcId}/repaireslogs`)
         if (res.data.data.length) {
           res.data.data.forEach(item => {
             let arr = item.repaireTime.split('~')
@@ -51,19 +53,21 @@ export default {
           })
         }
         return res.data
-      } catch (res) {
-        console.log(res)
+      } catch (err) {
+        console.log(err.response)
+        // return err.response
       }
     },
     /* 故障描述选择项 */
     async getErrordescriptions (bxClassId) {
       try {
-        let res = await this.$http.get(`/cmp/v1/errordescriptions/${bxClassId}`)
+        let res = await this.$http.get(`${BASE_URL}/errordescriptions/${bxClassId}`)
         // console.log(res.data.data)
         let arr = []
         res.data.data.forEach((item) => {
           arr.push(item.gzText)
         })
+        console.log('ttttt',arr)
         return arr
       } catch (res) {
         console.log(res)
@@ -72,7 +76,7 @@ export default {
     /* 提交资产报修 */
     async postSatisfaction (emplNo, zcId, Repair) {
       try {
-        let res = await this.$http.post(`/cmp/v1/empl/${emplNo}/resource/${zcId}/repair`, Repair)
+        let res = await this.$http.post(`${BASE_URL}/empl/${emplNo}/resource/${zcId}/repair`, Repair)
         // console.log(res.data.data)
         return res.data.data
       } catch (res) {

@@ -9,7 +9,7 @@
             <cell title="二级类型" value-align="left">{{datas.twoClass}}</cell>
           </group>
           
-          <box class="btnBox" v-if="!showTextarea">
+          <box class="btnBox" v-if="!showTextarea" v-show="datas.bxStuta==='0'">
             <x-button action-type="button" @click.native="repairs">报修</x-button>
           </box>
           <div v-if="showTextarea">
@@ -29,10 +29,10 @@
             </group>
             <toast v-model="showPositionValue" :text="info" :position="toast_position" type="text" :time="2000" width="auto"></toast>
 
-            <box class="btnBox">
+            <box class="btnBox" v-if="showRepairBtn">
               <flexbox>
                 <flexbox-item>
-                  <x-button @click.native="showPlugin">确定报修</x-button>
+                  <x-button @click.native="showPlugin" :disabled="repairBtnVisible">确定报修</x-button>
                 </flexbox-item>
                 <flexbox-item>
                   <x-button @click.native="cancel" class="cancel">取消</x-button>
@@ -87,7 +87,7 @@ export default {
   },
   data () {
     return {
-      emplNo: '15726',
+      emplNo: '',
       selectList: [],
       position: [],
       showTextarea: false,
@@ -99,10 +99,14 @@ export default {
       },
       showPositionValue: false,
       info: '',
-      toast_position: 'middle'
+      toast_position: 'middle',
+      repairBtnVisible:false,
+      showRepairBtn:true
     }
   },
-  async created () {},
+  async created () {
+    this.emplNo = window.sessionStorage.getItem('emplNo')
+  },
   methods: {
     /* 获取基本信息 */
     async refresh () {
@@ -117,7 +121,6 @@ export default {
       )
     },
     verify () {
-      console.log(1111)
       console.log(this.position)
       if (!this.position.length) { return '请选择故障描述' }
 
@@ -132,6 +135,8 @@ export default {
       this.repair.userOther = ''
     },
     async showPlugin () {
+      this.repairBtnVisible = true
+      console.log(this.repairBtnVisible)
       let result = this.verify()
       if (result) {
         this.showPositionValue = true
@@ -140,13 +145,17 @@ export default {
         this.repair.userId = this.emplNo
         this.repair.classId = this.datas.bxClassId
         this.repair.userDesc = this.position.toString()
-        console.log(this.repair)
 
         let obj = await this.postSatisfaction(this.emplNo, this.$route.query.zcId, this.repair)
         if (obj === 1) {
+          let self = this
           AlertModule.show({
             title: '报修成功',
-            content: `<div class="content">维修人员将会在1个工作日内进行处理</div><div class="ps">提示：如遇紧急故障情况，请拨打IT运维热线[<a class="a-style" href="tel:13888888888">13888888888</a>]与IT人员沟通详细情况以及时获取反馈</div>`
+            content: `<div class="content">维修人员将会在1个工作日内进行处理</div><div class="ps">提示：如遇紧急故障情况，请拨打IT运维热线[<a class="a-style" href="tel:13888888888">13888888888</a>]与IT人员沟通详细情况以及时获取反馈</div>`,
+            onHide () {
+              console.log('Module: I\'m hiding now')
+              self.showRepairBtn = false
+            }
           })
         }
       }

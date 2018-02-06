@@ -1,6 +1,6 @@
 <template>
     <div class="my-resource-content">
-      <Scroller lock-x height="1"
+      <Scroller lock-x
             @on-scroll-bottom="onScrollBottom"
             ref="scrollerBottom">
           <div>
@@ -8,16 +8,15 @@
               <cell title="资产名称" value-align="left" @click.native="$router.push({path: '/resourceInfo',query: { zcId:item.zcId }})" is-link>{{item.zcName}}</cell>
               <cell title="领用日期" value-align="left">{{item.receiveDate}}</cell>
             </group>
-            <load-more v-show="dataList.length" class="load" :tip="dataList.length < totalCount? '↑ 往上滑加载更多' : '没有更多数据了' "
-                :show-loading="dataList.length < totalCount">
+            <load-more class="load" :tip="dataList.length < totalCount? '↑ 往上滑加载更多' : '没有更多数据了' ">
             </load-more>
           </div>
       </Scroller>
       <div class="empty-info" v-if="!totalCount">
-        暂时还没有资产信息记录
+        您目前暂时还没有领用中的资产
       </div>
       <div>
-          <loading :show="isShow" :text="text"></loading>
+          <loading :show="$root.$data._loading.status" :text="text"></loading>
       </div>
     </div>
 </template>
@@ -36,7 +35,7 @@ export default {
   },
   data () {
     return {
-      emplNo: '15726',
+      emplNo: '',
       pageNo: 1, // 当前页码
       pageSize: 10, // 每页记录数
       totalCount: 0,
@@ -48,7 +47,13 @@ export default {
     }
   },
   async created () {
+    this.emplNo = window.sessionStorage.getItem('emplNo')
     this.refresh()
+  },
+  mounted () {
+    // this.$nextTick(() => {
+    //   this.$refs.scrollerBottom.reset({top: 0})
+    // })
   },
   methods: {
     async refresh () {
@@ -60,28 +65,38 @@ export default {
       this.totalCount = this.datas.page
       this.isShow = false
       this.$vux.loading.hide()
-      if (this.datas.data.gdzcLogs.length) {
-        let middleArr = this.datas.data.gdzcLogs
+      if (this.datas.data.length) {
+        let middleArr = this.datas.data
         this.dataList.push(...middleArr)
-        // console.log(this.dataList)
+        console.log('xxxxx', this.dataList)
+        this.$nextTick(() => {
+          this.$refs.scrollerBottom.reset()
+        })
         this.isScroll = this.dataList.length === this.totalCount
       }
     },
     async onScrollBottom () {
       if (!this.isScroll) {
         this.isScroll = true
-        if (this.totalCount > 10 || this.dataList.length < this.totalCount) {
+        if (this.dataList.length < this.totalCount) {
           this.pageNo++
-          this.refresh()
+          await this.refresh()
         }
       }
     }
+    // async pulldownEvent(){
+    //   console.log('pulldown')
+    //   if(this.pageNo > 1){
+    //     this.pageNo--
+    //     await this.refresh()
+    //   }
+    // }
   },
   watch: {
-    // datas: function () {
-    //   this.dataList = this.datas.data
-    //   this.totalCount = this.datas.page
-    // }
+    datas: function () {
+      // this.dataList = this.datas.data
+      this.totalCount = this.datas.page
+    }
   }
 }
 </script>

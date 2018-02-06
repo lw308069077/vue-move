@@ -9,16 +9,16 @@
 
         <group title="维修处理信息" class="other-group">
           <cell title="报修时间" value-align="left">{{repairsLog.createDate}}</cell>
-          <cell title="处理进度" value-align="left">{{repairsLog.status}}</cell>
-          <cell title="处理人" v-if="repairsLog.status==='4'" value-align="left">{{repairsLog.conductor}}</cell>
+          <cell title="处理进度" value-align="left">{{statusMap[repairsLog.status-1]}}</cell>
+          <cell title="处理人" v-if="repairsLog.status===REPAIREDUNCOMMENT" value-align="left">{{repairsLog.conductorName+"["+repairsLog.conductor+"]"}}</cell>
 
           <cell title="故障描述" value-align="left">{{repairsLog.conductorDesc}}</cell>
-          <cell title="故障类型" v-if="repairsLog.status==='4'" value-align="left">{{repairsLog.conductorType}}</cell>
-          <cell title="故障原因" v-if="repairsLog.status==='4'" value-align="left">{{repairsLog.conductorCause}}</cell>
-          <cell title="处理结果" v-if="repairsLog.status==='4'" value-align="left">{{repairsLog.conductorResult}}</cell>
+          <cell title="故障类型" v-if="repairsLog.status===REPAIREDUNCOMMENT" value-align="left">{{repairsLog.conductorType==="其他"?repairsLog.conductorTypeOther:repairsLog.conductorType}}</cell>
+          <cell title="故障原因" v-if="repairsLog.status===REPAIREDUNCOMMENT" value-align="left">{{repairsLog.conductorCause==="其他"?repairsLog.conductorCauseOther:repairsLog.conductorCause}}</cell>
+          <cell title="处理结果" v-if="repairsLog.status===REPAIREDUNCOMMENT" value-align="left">{{repairsLog.conductorResult==="其他"?repairsLog.conductorResultOther:repairsLog.conductorResult}}</cell>
         </group>
 
-        <group title="满意度评价" class="other-group" v-if="repairsLog.status==='4'">
+        <group title="满意度评价" class="other-group" v-if="repairsLog.status==='3'">
           <cell value-align="left">
             <template slot="title">
               <span style="color:red">*</span>
@@ -44,7 +44,7 @@
         </group>
         <toast v-model="showPositionValue" :text="info" :position="toast_position" type="text" :time="2000" width="auto"></toast>
 
-        <box class="btnBox" v-if="repairsLog.status==='4'">
+        <box class="btnBox" v-if="repairsLog.status===REPAIREDUNCOMMENT">
           <x-button action-type="button" @click.native="subEvaluate">提交评价</x-button>
         </box>
     </div>
@@ -76,8 +76,10 @@ export default {
         commentDesc: ''
       },
       showPositionValue: false,
+      REPAIREDUNCOMMENT:'3', //维修完成待评价
       info: '',
-      toast_position: 'middle'
+      toast_position: 'middle',
+      statusMap:['一级处理中','二级处理中','维修完成待评价','已完成']
     }
   },
   async created () {
@@ -87,6 +89,7 @@ export default {
     // 获取资产报修进度
     async refresh () {
       this.datas = await this.getRepair(this.$route.query.zcId)
+      console.log('ppppp',this.datas)
     },
     verify () {
       if (!this.params.commentType) { return '请选择满意度情况' }

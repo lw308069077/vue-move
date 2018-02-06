@@ -11,18 +11,24 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/cmp/v1': {
-        target: 'http://192.168.150.30',
-        // target: 'http://192.168.135.37',
+      '/lg':{
+        target: 'http://192.168.50.25:4028',
         pathRewrite: {
-          '^/cmp/v1': '/cmp/v1'
+          '^/lg': ''
+        }
+      },
+      '/cmp/m/v1': {
+        // target: 'http://192.168.150.30',
+        target: 'http://192.168.135.37:8080',
+        pathRewrite: {
+          '^/cmp/m/v1': '/cmp/m/v1'
         }
       }
     },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
-    port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    port: 8089, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
     notifyOnErrors: true,
@@ -55,7 +61,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: './',
 
     /**
      * Source Maps

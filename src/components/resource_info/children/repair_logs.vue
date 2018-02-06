@@ -7,11 +7,11 @@
           <group v-for="(item,index) in dataList" :key="index" :class="!index?'first-group':'other-group'">
             <cell title="维修时间" value-align="left">{{item.repaireTime}}</cell>
             <cell title="报 修 人" value-align="left">{{item.userName}}</cell>
-            <cell title="处 理 人" value-align="left">{{item.conductor}}</cell>
+            <cell title="处 理 人" value-align="left">{{item.conductorName?(item.conductorName+"["+item.conductor+"]"):"暂无"}}</cell>
             <cell title="故障描述" value-align="left">{{item.conductorDesc}}</cell>
-            <cell title="故障类型" value-align="left">{{item.conductorType}}</cell>
-            <cell title="故障原因" value-align="left">{{item.conductorCause}}</cell>
-            <cell title="处理结果" value-align="left">{{item.conductorResult}}</cell>
+            <cell title="故障类型" value-align="left">{{item.conductorType==="其他"?item.conductorTypeOther:item.conductorType}}</cell>
+            <cell title="故障原因" value-align="left">{{item.conductorCause==="其他"?item.conductorCauseOther:item.conductorCause}}</cell>
+            <cell title="处理结果" value-align="left">{{item.conductorResult==="其他"?item.conductorResultOther:item.conductorResult}}</cell>
           </group>
           <load-more v-show="dataList.length" class="load" :tip="dataList.length < totalCount? '↑ 往上滑加载更多' : '没有更多数据了' "
               :show-loading="dataList.length < totalCount">
@@ -62,7 +62,6 @@
             text: '加载中...'
           })
           this.datas = await this.getRepairesLogs(this.$route.query.zcId)
-          
           this.totalCount = this.datas.page
           this.isShow = false
           this.$vux.loading.hide()

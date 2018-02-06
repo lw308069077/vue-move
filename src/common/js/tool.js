@@ -58,3 +58,6 @@ export function formatDateTime(date, fmt) {
   let dateResult = parseInt(date.substr(6, 13))
   return formatDate(dateResult, fmt)
 }
+
+/* 接口代理部分 */
+export const BASE_URL = '/cmp/m/v1'

@@ -16,7 +16,7 @@ const webpackConfig = {
   },
   output: {
     path: config.build.assetsRoot,
-    filename: '[name].js',
+    filename: '[name].js?[hash]',
     publicPath: process.env.NODE_ENV === 'production'
       ? config.build.assetsPublicPath
       : config.dev.assetsPublicPath

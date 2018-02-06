@@ -10,9 +10,9 @@
         <cell title="部门">{{personalData.deptName}}</cell>
         <cell title="工号">{{personalData.emplNo}}</cell>
       </group>
-      <div  @click="submit">
+      <!-- <div  @click="submit">
           <x-button class="btn-logout">退出登录</x-button>
-      </div>
+      </div> -->
       <div class="versionInfo">
         <span>{{lastVersion}}</span>
         <a @click="versionInfo">版本说明</a>
@@ -40,7 +40,7 @@ export default {
   },
   data() {
     return {
-      emplNo: "15726",
+      emplNo: "",
       personalData: {},
       showPositionValue: false,
       position: "bottom",
@@ -72,39 +72,41 @@ export default {
       //   this.lastVersion = res.body.returnValue.VersionName;
       // });
     },
-    submit() {
-      this.$vux.loading.show({
-        text: "加载中..."
-      });
-      this.$http
-        .delete(api.logout())
-        .then(res => {
-          this.show = false;
-          this.$vux.loading.hide();
-          this.showPositionValue = true;
-          this.position = "middle";
-          if (!res.body.resultCode) {
-            this.info = "退出登录成功";
-            setTimeout(() => {
-              this.$router.push("/login");
-            }, 2000);
-          } else {
-            this.info = res.body.resultMessage;
-            if (res.body.resultCode === 401) {
-              setTimeout(() => {
-                this.$router.push("/login");
-              }, 2000);
-            }
-          }
-        })
-        .catch(res => {
-          console.error(res);
-        });
-    }
+    // submit() {
+    //   this.$vux.loading.show({
+    //     text: "加载中..."
+    //   });
+    //   this.$http
+    //     .delete(api.logout())
+    //     .then(res => {
+    //       this.show = false;
+    //       this.$vux.loading.hide();
+    //       this.showPositionValue = true;
+    //       this.position = "middle";
+    //       if (!res.body.resultCode) {
+    //         this.info = "退出登录成功";
+    //         setTimeout(() => {
+    //           this.$router.push("/login");
+    //         }, 2000);
+    //       } else {
+    //         this.info = res.body.resultMessage;
+    //         if (res.body.resultCode === 401) {
+    //           setTimeout(() => {
+    //             this.$router.push("/login");
+    //           }, 2000);
+    //         }
+    //       }
+    //     })
+    //     .catch(res => {
+    //       console.error(res);
+    //     });
+    // }
   },
   created() {
+    this.emplNo = window.sessionStorage.getItem('emplNo')
     this.fetchData();
     this.getLastVersion();
+    // console.log(this.emplNo)
   }
 };
 </script>

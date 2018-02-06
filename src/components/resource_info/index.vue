@@ -41,12 +41,13 @@ export default {
   },
   data () {
     return {
-      emplNo: '15726',
+      emplNo: '',
       index: 0,
       baseInfoDatas: {}
     }
   },
   created () {
+    this.emplNo = window.sessionStorage.getItem('emplNo')
     this.refrech()
   },
   methods: {
@@ -56,7 +57,7 @@ export default {
     },
     async refrech () {
       this.baseInfoDatas = await this.getBaseinfo(this.$route.query.zcId, this.emplNo)
-      console.log(this.baseInfoDatas)
+      console.log('xxxxxs',this.baseInfoDatas)
     }
   },
   watch: {
